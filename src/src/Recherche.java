@@ -1,13 +1,16 @@
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Dictionary;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Recherche {
-	
-	private AtomicInteger threadsCounter = new AtomicInteger(0);;
+
     private ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private static AtomicReference<Recherche> inst = new AtomicReference<>();
 
 
     /*Main Method
@@ -16,16 +19,20 @@ public class Recherche {
     *args[0] correspond à l'URL dans laquelle on recherche le mot
      */
 	public static void main(String[] args) {
-		Recherche Recherche = new Recherche();
-		Recherche.counter(args[1], args[0]);
+		Recherche recherche =  Recherche.getInst().get();
+		recherche.start(args[1], args[0]);
 	}
 
-	/*
-	Permet d'instancier les threads (ici 10)
-	 */
-	public void counter(String u, String m) {
+    public static AtomicReference<Recherche> getInst() {
+	    inst.compareAndSet(null, new Recherche());
+	    return inst;
+    }
+
+    /*
+    Permet d'instancier les threads (ici 10)
+     */
+	public void start(String u, String m) {
         try {
-            this.threadsCounter.incrementAndGet();
             this.executorService.submit(new PageThread(new URL(u), m));
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -35,9 +42,7 @@ public class Recherche {
     /*
     Arrête les threads
      */
-public void endCounter() {
-    if (threadsCounter.decrementAndGet() < 1) {
+public void finish() {
         executorService.shutdown();
-    }
 }
 }

@@ -26,6 +26,7 @@ public class PageThread implements Runnable {
 		 */
 		@Override
 		public void run() {
+			System.out.println(Thread.currentThread());
 			try {
 
 				BufferedReader in = null;
@@ -62,11 +63,11 @@ public class PageThread implements Runnable {
 				l1.add(urlFound);
 				String utl = ThreadTake.take(l2);
 				
-				Recherche p = new Recherche();
-				p.counter(utl, s);
+				Recherche recherche = Recherche.getInst().get();
+				recherche.start(utl, s);
 			}
 			Recherche p = new Recherche();
-			p.endCounter();
+			p.finish();
 			notify();
 		}
 	}
