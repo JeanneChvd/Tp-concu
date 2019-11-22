@@ -26,7 +26,7 @@ public class PageThread implements Runnable {
 		 */
 		@Override
 		public void run() {
-			System.out.println(Thread.currentThread());
+			//System.out.println(Thread.currentThread());
 			try {
 
 				BufferedReader in = null;
