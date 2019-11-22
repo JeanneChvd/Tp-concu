@@ -5,6 +5,10 @@ public class ThreadTake {
 
     private static ReentrantReadWriteLock Lock = new ReentrantReadWriteLock();
 
+    /*
+    Ajout du verrou Lock2
+    si la liste lst n'est pas vide, l'url prend la valeur du premier élément, on le supprime de la liste et on l'affiche
+     */
     static String take(List<String> lst) {
         Lock.writeLock().lock();
         String url = null;
